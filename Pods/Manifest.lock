@@ -1,0 +1,25 @@
+PODS:
+  - GPUImage (0.1.7)
+  - JSONModel (1.1.2)
+  - LGAlertView (2.0.13)
+  - Masonry (0.6.4)
+  - Reachability (3.2)
+  - SVProgressHUD (2.0-beta)
+
+DEPENDENCIES:
+  - GPUImage (~> 0.1.7)
+  - JSONModel (~> 1.1.2)
+  - LGAlertView (~> 2.0.13)
+  - Masonry (~> 0.6.3)
+  - Reachability (~> 3.2)
+  - SVProgressHUD (~> 2.0-beta)
+
+SPEC CHECKSUMS:
+  GPUImage: 733a5f0fab92df9de1c37ba9df520a833ccb406d
+  JSONModel: 216584d0311b053ff714f1d6cb700dbf890847bc
+  LGAlertView: 9a5dcbf4f81b02b718083539d7f222280adc9547
+  Masonry: 281802d04d787ea2973179ee8bcb50500579ede2
+  Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
+  SVProgressHUD: c83337f10ed32d701c423d519059a249973c8662
+
+COCOAPODS: 0.39.0

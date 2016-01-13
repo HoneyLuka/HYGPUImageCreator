@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9531" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="EditorFilterSlideCell" rowHeight="91" id="KGk-i7-Jjw" customClass="EditorFilterSlideCell">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="90"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="89.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="名字" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="way-EY-gWH">
+                        <rect key="frame" x="40" y="14" width="225" height="17"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="rho-Xa-Squ">
+                        <rect key="frame" x="38" y="45" width="270" height="31"/>
+                        <connections>
+                            <action selector="sliderAction:" destination="KGk-i7-Jjw" eventType="valueChanged" id="pS5-LE-uod"/>
+                        </connections>
+                    </slider>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" horizontalCompressionResistancePriority="752" text="12.91" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jZz-7H-3oF">
+                        <rect key="frame" x="277" y="16" width="29" height="14"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.5" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="diB-DM-rXf">
+                        <rect key="frame" x="40" y="89" width="280" height="1"/>
+                        <color key="backgroundColor" red="0.93333333333333335" green="0.93333333333333335" blue="0.93333333333333335" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="0.5" id="0LZ-5l-Mmm"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="way-EY-gWH" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="40" id="1Zq-LW-OdP"/>
+                    <constraint firstItem="rho-Xa-Squ" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="40" id="8DP-h4-glb"/>
+                    <constraint firstItem="way-EY-gWH" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="14" id="BoI-Nv-Pai"/>
+                    <constraint firstItem="diB-DM-rXf" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="40" id="GF7-ac-vgX"/>
+                    <constraint firstItem="jZz-7H-3oF" firstAttribute="centerY" secondItem="way-EY-gWH" secondAttribute="centerY" id="JN9-Ug-9ht"/>
+                    <constraint firstItem="rho-Xa-Squ" firstAttribute="top" secondItem="way-EY-gWH" secondAttribute="bottom" constant="14" id="ROl-E6-EQJ"/>
+                    <constraint firstItem="jZz-7H-3oF" firstAttribute="leading" secondItem="way-EY-gWH" secondAttribute="trailing" constant="12" id="cfg-8e-weZ"/>
+                    <constraint firstAttribute="trailing" secondItem="diB-DM-rXf" secondAttribute="trailing" id="fTb-9B-BIO"/>
+                    <constraint firstAttribute="bottom" secondItem="diB-DM-rXf" secondAttribute="bottom" id="g8L-Td-kph"/>
+                    <constraint firstAttribute="trailing" secondItem="jZz-7H-3oF" secondAttribute="trailing" constant="14" id="iXi-fC-Tir"/>
+                    <constraint firstAttribute="trailing" secondItem="rho-Xa-Squ" secondAttribute="trailing" constant="14" id="meF-fW-ugk"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="nameLabel" destination="way-EY-gWH" id="8jU-u1-AGa"/>
+                <outlet property="slider" destination="rho-Xa-Squ" id="ESX-u0-dVi"/>
+                <outlet property="valueLabel" destination="jZz-7H-3oF" id="N34-0U-wPD"/>
+            </connections>
+            <point key="canvasLocation" x="298" y="483.5"/>
+        </tableViewCell>
+    </objects>
+</document>

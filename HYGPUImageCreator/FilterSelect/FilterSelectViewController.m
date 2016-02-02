@@ -27,11 +27,23 @@
 
 @property (nonatomic, strong) IBOutlet UITableView *tableView;
 
-@property (nonatomic, strong) NSArray *dataArray;
+@property (nonatomic, strong) NSMutableArray *unusedArray;
 
 @end
 
 @implementation FilterSelectViewController
+
++ (instancetype)controllerWithUsedFilters:(NSMutableArray *)usedArray
+{
+  FilterSelectViewController *vc = [[FilterSelectViewController alloc]init];
+  if (usedArray.count) {
+    vc.usedArray = usedArray;
+  } else {
+    vc.usedArray = [NSMutableArray array];
+  }
+  
+  return vc;
+}
 
 - (void)viewDidLoad {
   [super viewDidLoad];
@@ -40,33 +52,54 @@
 
 - (void)initData
 {
-  BrightnessFilterItem *brightness = [BrightnessFilterItem create];
-  ContrastFilterItem *contrast = [ContrastFilterItem create];
-  RGBFilterItem *rgb = [RGBFilterItem create];
-  WhiteBalanceFilterItem *whiteBalance = [WhiteBalanceFilterItem create];
-  SaturationFilterItem *saturation = [SaturationFilterItem create];
-  HueFilterItem *hue = [HueFilterItem create];
-  SharpenFilterItem *sharpen = [SharpenFilterItem create];
-  ExposureFilterItem *exposure = [ExposureFilterItem create];
-  GammaFilterItem *gamma = [GammaFilterItem create];
-  HighlightShadowFilterItem *highlightShadow = [HighlightShadowFilterItem create];
-//  LookupFilterItem *lookup = [LookupFilterItem create];
-  ColorInvertFilterItem *colorInvert = [ColorInvertFilterItem create];
-  GrayscaleFilterItem *gray = [GrayscaleFilterItem create];
-  MonochromeFilterItem *mono = [MonochromeFilterItem create];
-  FalseColorFilterItem *falseColor = [FalseColorFilterItem create];
+  self.unusedArray = [NSMutableArray array];
+  NSArray *filtersName = @[@"BrightnessFilterItem",
+                           @"ContrastFilterItem",
+                           @"RGBFilterItem",
+                           @"WhiteBalanceFilterItem",
+                           @"SaturationFilterItem",
+                           @"HueFilterItem",
+                           @"SharpenFilterItem",
+                           @"ExposureFilterItem",
+                           @"GammaFilterItem",
+                           @"HighlightShadowFilterItem",
+                           @"ColorInvertFilterItem",
+                           @"GrayscaleFilterItem",
+                           @"MonochromeFilterItem",
+                           @"FalseColorFilterItem"];
+  filtersName = [filtersName sortedArrayUsingComparator:
+                 ^NSComparisonResult(NSString *obj1, NSString *obj2) {
+                   return [obj1 compare:obj2];
+  }];
   
-  self.dataArray = @[brightness, contrast, rgb, whiteBalance, saturation, hue, sharpen, exposure, gamma, highlightShadow, colorInvert, gray, mono, falseColor];
+  for (NSString *className in filtersName) {
+    FilterItem *filterItem = [NSClassFromString(className) create];
+    if (![self.usedArray containsObject:filterItem]) {
+      [self.unusedArray addObject:filterItem];
+    }
+  }
   [self.tableView reloadData];
+  self.tableView.editing = YES;
+  self.tableView.allowsSelectionDuringEditing = YES;
 }
 
 - (IBAction)cancelButtonClick:(UIBarButtonItem *)sender {
+  [self.delegate viewControllerDidFinishSelectingFilters:self];
   [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+  return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-  return self.dataArray.count;
+  if (section == 0) {
+    return self.usedArray.count;
+  }
+  
+  return self.unusedArray.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -77,7 +110,7 @@
     cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
   }
   
-  FilterItem *item = self.dataArray[indexPath.row];
+  FilterItem *item = indexPath.section == 0 ? self.usedArray[indexPath.row] : self.unusedArray[indexPath.row];
   cell.textLabel.text = item.name;
   
   return cell;
@@ -85,13 +118,54 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-  FilterItem *item = self.dataArray[indexPath.row];
+  [tableView deselectRowAtIndexPath:indexPath animated:YES];
   
-  if ([self.delegate respondsToSelector:@selector(viewController:didSelectFilter:)]) {
-    [self.delegate viewController:self didSelectFilter:item];
+  FilterItem *item = indexPath.section == 0 ? self.usedArray[indexPath.row] : self.unusedArray[indexPath.row];
+  
+  if (indexPath.section == 0) {
+    [self.usedArray removeObject:item];
+    [self.unusedArray addObject:item];
+    [tableView moveRowAtIndexPath:indexPath toIndexPath:[NSIndexPath indexPathForRow:self.unusedArray.count - 1 inSection:1]];
+  } else {
+    [self.unusedArray removeObject:item];
+    [self.usedArray addObject:item];
+        [tableView moveRowAtIndexPath:indexPath toIndexPath:[NSIndexPath indexPathForRow:self.usedArray.count - 1 inSection:0]];
   }
-  
-  [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
+{
+  return indexPath.section == 0;
+}
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+  return indexPath.section == 0;
+}
+
+- (NSIndexPath *)tableView:(UITableView *)tableView targetIndexPathForMoveFromRowAtIndexPath:(NSIndexPath *)sourceIndexPath toProposedIndexPath:(NSIndexPath *)proposedDestinationIndexPath
+{
+  if (proposedDestinationIndexPath.section == 1) {
+    return sourceIndexPath;
+  }
+  return proposedDestinationIndexPath;
+}
+
+- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath
+{
+  FilterItem *sourceItem = self.usedArray[sourceIndexPath.row];
+  [self.usedArray removeObject:sourceItem];
+  [self.usedArray insertObject:sourceItem atIndex:destinationIndexPath.row];
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+  return section == 0 ? @"Used Filters" : @"Unused Filters";
+}
+
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+  return UITableViewCellEditingStyleNone;
 }
 
 @end

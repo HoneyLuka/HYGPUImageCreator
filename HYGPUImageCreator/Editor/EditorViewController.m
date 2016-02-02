@@ -21,6 +21,8 @@
 
 @property (nonatomic, strong) UIImage *editImage;
 
+@property (nonatomic, strong) UIButton *addFilterButton;
+
 @property (nonatomic, strong) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) IBOutlet UIImageView *imageView;
 @property (nonatomic, strong) IBOutlet UIView *dragger;
@@ -92,10 +94,18 @@
   
   self.imageView.image = self.editImage;
   
-  UIBarButtonItem *addFilterButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
-                                                                                  target:self
-                                                                                  action:@selector(addFilterButtonClick)];
-  self.navigationItem.rightBarButtonItem = addFilterButton;
+  UIBarButtonItem *saveButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemSave
+                                                                             target:self
+                                                                             action:@selector(saveButtonClick)];
+  self.navigationItem.rightBarButtonItem = saveButton;
+  
+  self.addFilterButton = [UIButton buttonWithType:UIButtonTypeSystem];
+  [self.addFilterButton setTitle:@"Add filter element" forState:UIControlStateNormal];
+  self.addFilterButton.frame = CGRectMake(0, 0, 0, 60);
+  [self.addFilterButton addTarget:self
+                           action:@selector(addFilterButtonClick)
+                 forControlEvents:UIControlEventTouchUpInside];
+  self.tableView.tableFooterView = self.addFilterButton;
 }
 
 - (void)initData
@@ -122,6 +132,12 @@
 
 #pragma mark - action
 
+- (void)saveButtonClick
+{
+//   NSDictionary *dict = [self.listModel toDictionary];
+  NSLog(@"dict = %@", [self.listModel toJSONString]);
+}
+
 - (void)filterValueDidChangedAction:(NSNotification *)noti
 {
   NSArray *filterList = [self.listModel generateFilterArray];
@@ -135,7 +151,7 @@
 
 - (void)addFilterButtonClick
 {
-  FilterSelectViewController *vc = [[FilterSelectViewController alloc]init];
+  FilterSelectViewController *vc = [FilterSelectViewController controllerWithUsedFilters:self.listModel.filterList];
   vc.delegate = self;
   [self presentViewController:vc animated:YES completion:nil];
 }
@@ -196,15 +212,11 @@
 
 #pragma mark - SelectVCDelegate
 
-- (void)viewController:(FilterSelectViewController *)sender didSelectFilter:(FilterItem *)item
+- (void)viewControllerDidFinishSelectingFilters:(FilterSelectViewController *)sender
 {
-  if ([self.listModel.filterList containsObject:item]) {
-    return;
-  }
-  
-  [self.listModel.filterList addObject:item];
-  [self.tableView insertSections:[NSIndexSet indexSetWithIndex:self.listModel.filterList.count - 1]
-                withRowAnimation:UITableViewRowAnimationAutomatic];
+  self.listModel.filterList = sender.usedArray;
+  [self.tableView reloadData];
+  [self filterValueDidChangedAction:nil];
 }
 
 #pragma mark - UIGestureDelegate

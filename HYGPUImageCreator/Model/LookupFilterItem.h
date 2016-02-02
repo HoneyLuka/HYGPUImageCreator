@@ -8,6 +8,8 @@
 
 #import "FilterItem.h"
 
+#warning can't use now
+
 @interface LookupFilterItem : FilterItem
 
 @end

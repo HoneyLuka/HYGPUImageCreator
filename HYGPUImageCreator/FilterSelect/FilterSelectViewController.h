@@ -12,12 +12,16 @@
 @class FilterSelectViewController;
 @protocol FilterSelectViewControllerDelegate <NSObject>
 
-- (void)viewController:(FilterSelectViewController *)sender didSelectFilter:(FilterItem *)item;
+- (void)viewControllerDidFinishSelectingFilters:(FilterSelectViewController *)sender;
 
 @end
 
 @interface FilterSelectViewController : BaseViewController
 
+@property (nonatomic, strong) NSMutableArray *usedArray;
+
 @property (nonatomic, weak) id<FilterSelectViewControllerDelegate> delegate;
+
++ (instancetype)controllerWithUsedFilters:(NSMutableArray *)usedArray;
 
 @end

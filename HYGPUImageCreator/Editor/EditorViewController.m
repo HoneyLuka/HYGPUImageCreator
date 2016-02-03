@@ -17,6 +17,7 @@
 #import "FilterSelectViewController.h"
 #import "FileManager.h"
 #import "SVProgressHUD.h"
+#import "ShareManager.h"
 
 @interface EditorViewController () <UIGestureRecognizerDelegate, UITableViewDataSource, UITableViewDelegate, FilterSelectViewControllerDelegate, UIAlertViewDelegate, UIActionSheetDelegate>
 
@@ -202,7 +203,7 @@
                                                     delegate:self
                                            cancelButtonTitle:@"Cancel"
                                       destructiveButtonTitle:nil
-                                           otherButtonTitles:@"Copy to pasteboard", nil];
+                                           otherButtonTitles:@"Copy to pasteboard", @"Save to Dropbox", nil];
   [sheet showInView:self.view];
 }
 
@@ -307,6 +308,8 @@
     NSString *test = [[NSString alloc]initWithData:self.jsonData encoding:NSUTF8StringEncoding];
     [UIPasteboard generalPasteboard].string = test;
     [SVProgressHUD showSuccessWithStatus:@"Copied to pasteboard"];
+  } else if (buttonIndex == 1) {
+    [[ShareManager sharedInstance]shareToDropboxWithName:self.listModel.name data:self.jsonData fromController:self];
   }
 }
 

@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		5480A73EE1D6FF8013620754 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 532EB1655337A38E11A57D08 /* libPods.a */; };
 		BF12EC1F1C60B1A800847EB5 /* FileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BF12EC1E1C60B1A800847EB5 /* FileManager.m */; };
+		BF12EC231C61FE9E00847EB5 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF12EC221C61FE9E00847EB5 /* Security.framework */; };
+		BF12EC251C61FEA500847EB5 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF12EC241C61FEA500847EB5 /* QuartzCore.framework */; };
+		BF12EC281C62013700847EB5 /* ShareManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BF12EC271C62013700847EB5 /* ShareManager.m */; };
+		BF12EC2A1C6211B400847EB5 /* DropboxSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF12EC291C6211B400847EB5 /* DropboxSDK.framework */; };
 		BF7B25C91C44EE0300EB85AC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BF7B25C81C44EE0300EB85AC /* main.m */; };
 		BF7B25CC1C44EE0300EB85AC /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = BF7B25CB1C44EE0300EB85AC /* AppDelegate.m */; };
 		BF7B25D41C44EE0300EB85AC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BF7B25D31C44EE0300EB85AC /* Assets.xcassets */; };
@@ -56,6 +60,11 @@
 		57CD941C0C6B8A7B2243D075 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		BF12EC1D1C60B1A800847EB5 /* FileManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileManager.h; sourceTree = "<group>"; };
 		BF12EC1E1C60B1A800847EB5 /* FileManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileManager.m; sourceTree = "<group>"; };
+		BF12EC221C61FE9E00847EB5 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		BF12EC241C61FEA500847EB5 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		BF12EC261C62013700847EB5 /* ShareManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShareManager.h; sourceTree = "<group>"; };
+		BF12EC271C62013700847EB5 /* ShareManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShareManager.m; sourceTree = "<group>"; };
+		BF12EC291C6211B400847EB5 /* DropboxSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DropboxSDK.framework; path = HYGPUImageCreator/DropboxSDK.framework; sourceTree = "<group>"; };
 		BF7B25C41C44EE0300EB85AC /* HYGPUImageCreator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HYGPUImageCreator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BF7B25C81C44EE0300EB85AC /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		BF7B25CA1C44EE0300EB85AC /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = ../AppDelegate.h; sourceTree = "<group>"; };
@@ -138,6 +147,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BF12EC2A1C6211B400847EB5 /* DropboxSDK.framework in Frameworks */,
+				BF12EC251C61FEA500847EB5 /* QuartzCore.framework in Frameworks */,
+				BF12EC231C61FE9E00847EB5 /* Security.framework in Frameworks */,
 				5480A73EE1D6FF8013620754 /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -252,6 +264,8 @@
 				BF7B25FB1C45079600EB85AC /* Utils.m */,
 				BF12EC1D1C60B1A800847EB5 /* FileManager.h */,
 				BF12EC1E1C60B1A800847EB5 /* FileManager.m */,
+				BF12EC261C62013700847EB5 /* ShareManager.h */,
+				BF12EC271C62013700847EB5 /* ShareManager.m */,
 			);
 			name = Util;
 			sourceTree = "<group>";
@@ -353,6 +367,9 @@
 		CFDD587BB964059EAC5B3817 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				BF12EC291C6211B400847EB5 /* DropboxSDK.framework */,
+				BF12EC241C61FEA500847EB5 /* QuartzCore.framework */,
+				BF12EC221C61FE9E00847EB5 /* Security.framework */,
 				532EB1655337A38E11A57D08 /* libPods.a */,
 			);
 			name = Frameworks;
@@ -498,6 +515,7 @@
 				BF7B26411C4659A300EB85AC /* SaturationFilterItem.m in Sources */,
 				BF7B26471C46602D00EB85AC /* SharpenFilterItem.m in Sources */,
 				BF7B26111C4625F300EB85AC /* FilterElement.m in Sources */,
+				BF12EC281C62013700847EB5 /* ShareManager.m in Sources */,
 				BF7B26531C4663EB00EB85AC /* LookupFilterItem.m in Sources */,
 				BF7B265F1C46684500EB85AC /* FalseColorFilterItem.m in Sources */,
 				BF7B264A1C4660BD00EB85AC /* ExposureFilterItem.m in Sources */,
@@ -621,6 +639,12 @@
 			baseConfigurationReference = 57CD941C0C6B8A7B2243D075 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/dropbox-ios-sdk-1.3.13",
+					"$(PROJECT_DIR)/HYGPUImageCreator",
+				);
 				INFOPLIST_FILE = HYGPUImageCreator/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -634,6 +658,12 @@
 			baseConfigurationReference = DC9FC0B3FD386855BFFF12BD /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/dropbox-ios-sdk-1.3.13",
+					"$(PROJECT_DIR)/HYGPUImageCreator",
+				);
 				INFOPLIST_FILE = HYGPUImageCreator/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

@@ -10,6 +10,10 @@
 #import "MainViewController.h"
 #import "BaseNavigationController.h"
 #import "AppDelegate+AppConfig.h"
+#import <DropboxSDK/DropboxSDK.h>
+
+#define APP_KEY @"rdhg3r42059oyel"
+#define APP_SECRET @"z4lhb00sc8985mj"
 
 @interface AppDelegate ()
 
@@ -27,8 +31,26 @@
   [self.window makeKeyAndVisible];
   
   [self configureApp];
-  // Override point for customization after application launch.
+  
+  //dropbox
+  DBSession *dbSession = [[DBSession alloc]initWithAppKey:APP_KEY
+                                                appSecret:APP_SECRET
+                                                     root:kDBRootAppFolder];
+  [DBSession setSharedSession:dbSession];
+  
   return YES;
+}
+
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
+{
+  if ([[DBSession sharedSession]handleOpenURL:url]) {
+    if ([DBSession sharedSession].isLinked) {
+      NSLog(@"Linked!");
+    }
+    return YES;
+  }
+  
+  return NO;
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {

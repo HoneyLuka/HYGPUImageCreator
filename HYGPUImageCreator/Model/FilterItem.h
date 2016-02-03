@@ -10,16 +10,15 @@
 #import "FilterElement.h"
 #import "GPUImage.h"
 
-@protocol FilterItem <NSObject>
-@end
-
-@interface FilterItem : JSONModel
+@interface FilterItem : NSObject
 
 @property (nonatomic, strong) NSString *name;
 @property (nonatomic, assign) BOOL enabled;
-@property (nonatomic, strong) NSMutableArray<FilterElement> *elements;
+@property (nonatomic, strong) NSMutableArray *elements;
 
 - (GPUImageOutput<GPUImageInput> *)generateFilter;
+
+- (NSDictionary *)dictionaryForJSON;
 
 + (instancetype)create;
 

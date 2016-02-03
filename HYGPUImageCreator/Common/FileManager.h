@@ -12,7 +12,9 @@
 @interface FileManager : NSObject
 
 - (BOOL)saveFilterList:(FilterListModel *)model;
-- (BOOL)deleteFilterList:(FilterListModel *)model;
+- (BOOL)deleteFile:(NSString *)name;
+- (BOOL)renameFile:(NSString *)newName oldName:(NSString *)oldName;
+- (void)removeAllFile;
 - (BOOL)filterIsExist:(NSString *)name;
 - (NSMutableArray *)loadAllFilters;
 

@@ -18,11 +18,13 @@
 #import "FileManager.h"
 #import "SVProgressHUD.h"
 
-@interface EditorViewController () <UIGestureRecognizerDelegate, UITableViewDataSource, UITableViewDelegate, FilterSelectViewControllerDelegate>
+@interface EditorViewController () <UIGestureRecognizerDelegate, UITableViewDataSource, UITableViewDelegate, FilterSelectViewControllerDelegate, UIAlertViewDelegate, UIActionSheetDelegate>
 
 @property (nonatomic, strong) UIImage *editImage;
 
 @property (nonatomic, strong) UIButton *addFilterButton;
+
+@property (nonatomic, strong) UILabel *titleView;
 
 @property (nonatomic, strong) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) IBOutlet UIImageView *imageView;
@@ -39,6 +41,11 @@
 @property (nonatomic, strong) FilterListModel *listModel;
 
 @property (nonatomic, strong) NSMutableSet *hideDetailSet;
+
+@property (nonatomic, copy) NSString *oldName;
+@property (nonatomic, assign) BOOL needReplace;
+
+@property (nonatomic, strong) NSData *jsonData;
 
 @end
 
@@ -100,7 +107,10 @@
   UIBarButtonItem *saveButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemSave
                                                                              target:self
                                                                              action:@selector(saveButtonClick)];
-  self.navigationItem.rightBarButtonItem = saveButton;
+  UIBarButtonItem *shareButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAction
+                                                                              target:self
+                                                                              action:@selector(shareButtonClick)];
+  self.navigationItem.rightBarButtonItems = @[saveButton, shareButton];
   
   self.addFilterButton = [UIButton buttonWithType:UIButtonTypeSystem];
   [self.addFilterButton setTitle:@"Add filter element" forState:UIControlStateNormal];
@@ -109,6 +119,16 @@
                            action:@selector(addFilterButtonClick)
                  forControlEvents:UIControlEventTouchUpInside];
   self.tableView.tableFooterView = self.addFilterButton;
+  
+  //titleView
+  self.titleView = [[UILabel alloc]init];
+  self.titleView.textAlignment = NSTextAlignmentCenter;
+  self.titleView.font = [UIFont boldSystemFontOfSize:17.f];
+  self.titleView.userInteractionEnabled = YES;
+  self.navigationItem.titleView = self.titleView;
+  
+  UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(changeNameButtonClick)];
+  [self.titleView addGestureRecognizer:tap];
 }
 
 - (void)initData
@@ -117,9 +137,12 @@
     self.listModel = [[FilterListModel alloc]init];
   }
   
-  self.title = self.listModel.name;
+  self.oldName = self.listModel.name;
+  
+  [self reloadTitle];
   
   [self.tableView reloadData];
+  [self reloadImage];
 }
 
 - (void)showDragger
@@ -138,10 +161,71 @@
   }];
 }
 
+- (void)reloadImage
+{
+  NSArray *filterList = [self.listModel generateFilterArray];
+  if (filterList.count) {
+    self.imageView.image = [self.editImage _processFilters:filterList];
+  } else {
+    self.imageView.image = self.editImage;
+  }
+}
+
+- (void)reloadTitle
+{
+  self.navigationItem.titleView = nil;
+  
+  self.title = self.listModel.name;
+  self.titleView.text = self.listModel.name;
+  [self.titleView sizeToFit];
+  
+  self.navigationItem.titleView = self.titleView;
+}
+
 #pragma mark - action
+
+- (void)shareButtonClick
+{
+  NSDictionary *shareDict = [self.listModel dictionaryForJSON];
+  NSError *error;
+  NSData *data = [NSJSONSerialization dataWithJSONObject:shareDict
+                                                 options:NSJSONWritingPrettyPrinted
+                                                   error:&error];
+  
+  if (!data || error) {
+    [SVProgressHUD showErrorWithStatus:@"Generate JSON data error."];
+    return;
+  }
+  self.jsonData = data;
+  
+  UIActionSheet *sheet = [[UIActionSheet alloc]initWithTitle:@"Choose a way to share"
+                                                    delegate:self
+                                           cancelButtonTitle:@"Cancel"
+                                      destructiveButtonTitle:nil
+                                           otherButtonTitles:@"Copy to pasteboard", nil];
+  [sheet showInView:self.view];
+}
+
+- (void)changeNameButtonClick
+{
+  UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"Input Filter Name"
+                                                     message:nil
+                                                    delegate:self
+                                           cancelButtonTitle:@"Cancel"
+                                           otherButtonTitles:@"Confirm", nil];
+  alertView.alertViewStyle = UIAlertViewStylePlainTextInput;
+  [alertView show];
+  
+  UITextField *textField = [alertView textFieldAtIndex:0];
+  textField.text = self.listModel.name;
+}
 
 - (void)saveButtonClick
 {
+  if (self.needReplace) {
+    [[FileManager sharedInstance]deleteFile:self.oldName];
+  }
+  
   if ([[FileManager sharedInstance]saveFilterList:self.listModel]) {
     [SVProgressHUD showSuccessWithStatus:@"Saved."];
   } else {
@@ -151,13 +235,7 @@
 
 - (void)filterValueDidChangedAction:(NSNotification *)noti
 {
-  NSArray *filterList = [self.listModel generateFilterArray];
-  if (filterList.count) {
-    self.imageView.image = [self.editImage _processFilters:filterList];
-  } else {
-    self.imageView.image = self.editImage;
-  }
-  
+  [self reloadImage];
 }
 
 - (void)addFilterButtonClick
@@ -221,13 +299,55 @@
                 withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
+#pragma mark - UIActionSheetDelegate
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+  if (buttonIndex == 0) {
+    NSString *test = [[NSString alloc]initWithData:self.jsonData encoding:NSUTF8StringEncoding];
+    [UIPasteboard generalPasteboard].string = test;
+    [SVProgressHUD showSuccessWithStatus:@"Copied to pasteboard"];
+  }
+}
+
+#pragma mark - UIAlertViewDelegate
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+  if (buttonIndex == 1) {
+    UITextField *textField = [alertView textFieldAtIndex:0];
+    NSString *name = [textField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    
+    if ([[FileManager sharedInstance]filterIsExist:name]) {
+      [SVProgressHUD showErrorWithStatus:@"Name is duplicate."];
+      return;
+    }
+    
+    self.listModel.name = name;
+    [self reloadTitle];
+    self.needReplace = YES;
+  }
+}
+
+- (BOOL)alertViewShouldEnableFirstOtherButton:(UIAlertView *)alertView
+{
+  UITextField *textField = [alertView textFieldAtIndex:0];
+  NSString *trimedString = [textField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+  
+  if (trimedString.length) {
+    return YES;
+  }
+  
+  return NO;
+}
+
 #pragma mark - SelectVCDelegate
 
 - (void)viewControllerDidFinishSelectingFilters:(FilterSelectViewController *)sender
 {
   self.listModel.filterList = sender.usedArray;
   [self.tableView reloadData];
-  [self filterValueDidChangedAction:nil];
+  [self reloadImage];
 }
 
 #pragma mark - UIGestureDelegate

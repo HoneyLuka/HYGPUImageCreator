@@ -9,7 +9,7 @@
 #import <JSONModel/JSONModel.h>
 #import <UIKit/UIKit.h>
 
-@interface FilterRange : JSONModel
+@interface FilterRange : NSObject
 
 @property (nonatomic, assign) CGFloat minValue;
 @property (nonatomic, assign) CGFloat maxValue;

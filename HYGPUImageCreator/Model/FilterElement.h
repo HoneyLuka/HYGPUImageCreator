@@ -9,19 +9,18 @@
 #import <JSONModel/JSONModel.h>
 #import "FilterRange.h"
 
-@protocol FilterElement <NSObject>
-@end
-
 typedef NS_ENUM(NSUInteger, FilterElementShowType) {
   FilterElementShowTypeSlider,
 };
 
-@interface FilterElement : JSONModel
+@interface FilterElement : NSObject
 
 @property (nonatomic, strong) NSString *name;
 @property (nonatomic, assign) FilterElementShowType showType;
 @property (nonatomic, strong) FilterRange *range;
 @property (nonatomic, strong) NSNumber *defaultValue;
 @property (nonatomic, strong) NSNumber *currentValue;
+
+- (NSDictionary *)dictionaryForJSON;
 
 @end

@@ -12,12 +12,12 @@
 #import "FileManager.h"
 #import "FilterListModel.h"
 
-@interface MainViewController () <UITableViewDataSource, UITableViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
+@interface MainViewController () <UITableViewDataSource, UITableViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIAlertViewDelegate>
 
 @property (nonatomic, strong) IBOutlet UITableView *tableView;
 
 @property (nonatomic, strong) UIBarButtonItem *addButton;
-@property (nonatomic, strong) UIBarButtonItem *editButton;
+@property (nonatomic, strong) UIBarButtonItem *clearButton;
 
 @property (nonatomic, strong) NSMutableArray *dataArray;
 
@@ -46,10 +46,10 @@
   self.addButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
                                                                 target:self
                                                                 action:@selector(addButtonClick)];
-  self.editButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemEdit
+  self.clearButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemTrash
                                                                  target:self
-                                                                 action:@selector(editButtonClick)];
-  self.navigationItem.leftBarButtonItem = self.editButton;
+                                                                 action:@selector(clearButtonClick)];
+  self.navigationItem.leftBarButtonItem = self.clearButton;
   self.navigationItem.rightBarButtonItem = self.addButton;
 }
 
@@ -86,9 +86,23 @@
   [self showImagePicker];
 }
 
-- (void)editButtonClick
+- (void)clearButtonClick
 {
-  
+  [[[UIAlertView alloc]initWithTitle:@"Warning"
+                             message:@"do you want to delete all filters?"
+                            delegate:self
+                   cancelButtonTitle:@"Cancel"
+                   otherButtonTitles:@"Yes", nil]show];
+}
+
+#pragma mark - UIAlertViewDelegate
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+  if (buttonIndex == 1) {
+    [[FileManager sharedInstance]removeAllFile];
+    [self initData];
+  }
 }
 
 #pragma mark - ImagePickerDelegate
@@ -137,6 +151,16 @@
   FilterListModel *model = self.dataArray[indexPath.row];
   self.selectedFilter = model;
   [self showImagePicker];
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+  if (editingStyle == UITableViewCellEditingStyleDelete) {
+    FilterListModel *model = self.dataArray[indexPath.row];
+    [self.dataArray removeObject:model];
+    [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+    [[FileManager sharedInstance]deleteFile:model.name];
+  }
 }
 
 @end

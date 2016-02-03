@@ -10,11 +10,13 @@
 #import "FilterItem.h"
 #import "ContrastFilterItem.h"
 
-@interface FilterListModel : JSONModel
+@interface FilterListModel : NSObject <NSCoding>
 
 @property (nonatomic, strong) NSString *name;
-@property (nonatomic, strong) NSMutableArray<FilterItem> *filterList;
+@property (nonatomic, strong) NSMutableArray *filterList;
 
 - (NSArray *)generateFilterArray;
+
+- (NSDictionary *)dictionaryForJSON;
 
 @end

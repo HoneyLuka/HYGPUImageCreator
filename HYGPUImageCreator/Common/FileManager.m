@@ -50,14 +50,46 @@
   return NO;
 }
 
-- (BOOL)deleteFilterList:(FilterListModel *)model
+- (BOOL)deleteFile:(NSString *)name
 {
-  if (![self filterIsExist:model.name]) {
+  if (![self filterIsExist:name]) {
     return NO;
   }
   
-  NSString *url = [NSString stringWithFormat:@"%@%@.json", [self cacheFolder], model.name];
+  NSString *url = [NSString stringWithFormat:@"%@%@.json", [self cacheFolder], name];
   return [[NSFileManager defaultManager]removeItemAtPath:url error:nil];
+}
+
+- (BOOL)renameFile:(NSString *)newName oldName:(NSString *)oldName
+{
+  if (!newName.length) {
+    return NO;
+  }
+  
+  if (![self filterIsExist:oldName]) {
+    return NO;
+  }
+  
+  if ([self filterIsExist:newName]) {
+    return NO;
+  }
+  
+  NSString *oldPath = [NSString stringWithFormat:@"%@%@.json", [self cacheFolder], oldName];
+  NSString *newPath = [NSString stringWithFormat:@"%@%@.json", [self cacheFolder], newName];
+  return [[NSFileManager defaultManager]moveItemAtPath:oldPath toPath:newPath error:nil];
+}
+
+- (void)removeAllFile
+{
+  NSDirectoryEnumerator<NSString *> *enumerator = [[NSFileManager defaultManager]enumeratorAtPath:[self cacheFolder]];
+  NSString *fileName = enumerator.nextObject;
+  
+  while (fileName) {
+    NSString *fullyFilePath = [NSString stringWithFormat:@"%@%@", [self cacheFolder], fileName];
+    [[NSFileManager defaultManager]removeItemAtPath:fullyFilePath error:nil];
+    
+    fileName = enumerator.nextObject;
+  }
 }
 
 - (BOOL)filterIsExist:(NSString *)name
@@ -76,7 +108,6 @@
   while (fileName) {
     NSString *fullyFilePath = [NSString stringWithFormat:@"%@%@", [self cacheFolder], fileName];
     NSData *data = [NSData dataWithContentsOfFile:fullyFilePath];
-//    FilterListModel *model = [[FilterListModel alloc]initWithData:data error:nil];
     FilterListModel *model = [NSKeyedUnarchiver unarchiveObjectWithData:data];
     if (model) {
       [filters addObject:model];

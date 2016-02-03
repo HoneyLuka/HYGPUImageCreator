@@ -7,9 +7,10 @@
 //
 
 #import "BaseViewController.h"
+#import "FilterListModel.h"
 
 @interface EditorViewController : BaseViewController
 
-+ (instancetype)controllerWithEditImage:(UIImage *)image;
++ (instancetype)controllerWithEditImage:(UIImage *)image filter:(FilterListModel *)filter;
 
 @end

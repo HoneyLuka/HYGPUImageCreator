@@ -9,13 +9,14 @@
 #import "EditorViewController.h"
 #import "Utils.h"
 #import "UIColor+Utils.h"
-#import "FilterListModel.h"
 #import "EditorFilterSectionHeaderView.h"
 #import "EditorFilterSlideCell.h"
 #import "BrightnessFilterItem.h"
 #import "AppConst.h"
 #import "UIImage+ImageFilter.h"
 #import "FilterSelectViewController.h"
+#import "FileManager.h"
+#import "SVProgressHUD.h"
 
 @interface EditorViewController () <UIGestureRecognizerDelegate, UITableViewDataSource, UITableViewDelegate, FilterSelectViewControllerDelegate>
 
@@ -44,9 +45,11 @@
 @implementation EditorViewController
 
 + (instancetype)controllerWithEditImage:(UIImage *)image
+                                 filter:(FilterListModel *)filter
 {
   EditorViewController *vc = [[EditorViewController alloc]init];
   vc.editImage = image;
+  vc.listModel = filter;
   return vc;
 }
 
@@ -110,8 +113,13 @@
 
 - (void)initData
 {
-  self.listModel = [[FilterListModel alloc]init];
+  if (!self.listModel) {
+    self.listModel = [[FilterListModel alloc]init];
+  }
+  
   self.title = self.listModel.name;
+  
+  [self.tableView reloadData];
 }
 
 - (void)showDragger
@@ -134,8 +142,11 @@
 
 - (void)saveButtonClick
 {
-//   NSDictionary *dict = [self.listModel toDictionary];
-  NSLog(@"dict = %@", [self.listModel toJSONString]);
+  if ([[FileManager sharedInstance]saveFilterList:self.listModel]) {
+    [SVProgressHUD showSuccessWithStatus:@"Saved."];
+  } else {
+    [SVProgressHUD showErrorWithStatus:@"Something wrong."];
+  }
 }
 
 - (void)filterValueDidChangedAction:(NSNotification *)noti

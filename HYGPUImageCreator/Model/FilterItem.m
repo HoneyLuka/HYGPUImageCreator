@@ -7,6 +7,7 @@
 //
 
 #import "FilterItem.h"
+#import "ContrastFilterItem.h"
 
 @implementation FilterItem
 

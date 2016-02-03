@@ -9,6 +9,8 @@
 #import "MainViewController.h"
 #import <SVProgressHUD.h>
 #import "EditorViewController.h"
+#import "FileManager.h"
+#import "FilterListModel.h"
 
 @interface MainViewController () <UITableViewDataSource, UITableViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
@@ -19,6 +21,8 @@
 
 @property (nonatomic, strong) NSMutableArray *dataArray;
 
+@property (nonatomic, strong) FilterListModel *selectedFilter;
+
 @end
 
 @implementation MainViewController
@@ -27,6 +31,12 @@
   [super viewDidLoad];
   
   [self initView];
+//  [self initData];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+  [super viewWillAppear:animated];
   [self initData];
 }
 
@@ -45,7 +55,8 @@
 
 - (void)initData
 {
-  
+  self.dataArray = [[FileManager sharedInstance]loadAllFilters];
+  [self.tableView reloadData];
 }
 
 - (BOOL)checkIfCanLoadPhotoLibrary
@@ -53,9 +64,7 @@
   return [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary];
 }
 
-#pragma mark - Action
-
-- (void)addButtonClick
+- (void)showImagePicker
 {
   if (![self checkIfCanLoadPhotoLibrary]) {
     [SVProgressHUD showErrorWithStatus:@"没有查看照片的权限"];
@@ -67,6 +76,14 @@
   picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
   picker.allowsEditing = YES;
   [self presentViewController:picker animated:YES completion:nil];
+}
+
+#pragma mark - Action
+
+- (void)addButtonClick
+{
+  self.selectedFilter = nil;
+  [self showImagePicker];
 }
 
 - (void)editButtonClick
@@ -83,7 +100,7 @@
     if (!image) {
       return;
     }
-    EditorViewController *editVC = [EditorViewController controllerWithEditImage:image];
+    EditorViewController *editVC = [EditorViewController controllerWithEditImage:image filter:self.selectedFilter];
     [self.navigationController pushViewController:editVC animated:YES];
   }];
 }
@@ -102,12 +119,24 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-  return nil;
+  static NSString *cellId = @"cell";
+  UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+  if (!cell) {
+    cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+  }
+  
+  FilterListModel *model = self.dataArray[indexPath.row];
+  cell.textLabel.text = model.name;
+  return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+  [tableView deselectRowAtIndexPath:indexPath animated:YES];
   
+  FilterListModel *model = self.dataArray[indexPath.row];
+  self.selectedFilter = model;
+  [self showImagePicker];
 }
 
 @end

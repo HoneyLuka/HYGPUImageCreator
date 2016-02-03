@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		5480A73EE1D6FF8013620754 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 532EB1655337A38E11A57D08 /* libPods.a */; };
+		BF12EC1F1C60B1A800847EB5 /* FileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BF12EC1E1C60B1A800847EB5 /* FileManager.m */; };
 		BF7B25C91C44EE0300EB85AC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BF7B25C81C44EE0300EB85AC /* main.m */; };
 		BF7B25CC1C44EE0300EB85AC /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = BF7B25CB1C44EE0300EB85AC /* AppDelegate.m */; };
 		BF7B25D41C44EE0300EB85AC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BF7B25D31C44EE0300EB85AC /* Assets.xcassets */; };
@@ -21,7 +22,6 @@
 		BF7B25F81C44FC7700EB85AC /* EditorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BF7B25F61C44FC7700EB85AC /* EditorViewController.xib */; };
 		BF7B25FC1C45079600EB85AC /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = BF7B25FB1C45079600EB85AC /* Utils.m */; };
 		BF7B26031C4602C900EB85AC /* UIColor+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = BF7B26021C4602C900EB85AC /* UIColor+Utils.m */; };
-		BF7B26071C46074100EB85AC /* FilterManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BF7B26061C46074100EB85AC /* FilterManager.m */; };
 		BF7B260E1C461E5300EB85AC /* BrightnessFilterItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BF7B260D1C461E5300EB85AC /* BrightnessFilterItem.m */; };
 		BF7B26111C4625F300EB85AC /* FilterElement.m in Sources */ = {isa = PBXBuildFile; fileRef = BF7B26101C4625F300EB85AC /* FilterElement.m */; };
 		BF7B26141C46260800EB85AC /* FilterItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BF7B26131C46260800EB85AC /* FilterItem.m */; };
@@ -54,6 +54,8 @@
 /* Begin PBXFileReference section */
 		532EB1655337A38E11A57D08 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		57CD941C0C6B8A7B2243D075 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		BF12EC1D1C60B1A800847EB5 /* FileManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileManager.h; sourceTree = "<group>"; };
+		BF12EC1E1C60B1A800847EB5 /* FileManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileManager.m; sourceTree = "<group>"; };
 		BF7B25C41C44EE0300EB85AC /* HYGPUImageCreator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HYGPUImageCreator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BF7B25C81C44EE0300EB85AC /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		BF7B25CA1C44EE0300EB85AC /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = ../AppDelegate.h; sourceTree = "<group>"; };
@@ -77,8 +79,6 @@
 		BF7B25FB1C45079600EB85AC /* Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utils.m; sourceTree = "<group>"; };
 		BF7B26011C4602C900EB85AC /* UIColor+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Utils.h"; sourceTree = "<group>"; };
 		BF7B26021C4602C900EB85AC /* UIColor+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Utils.m"; sourceTree = "<group>"; };
-		BF7B26051C46074100EB85AC /* FilterManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FilterManager.h; sourceTree = "<group>"; };
-		BF7B26061C46074100EB85AC /* FilterManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilterManager.m; sourceTree = "<group>"; };
 		BF7B260C1C461E5300EB85AC /* BrightnessFilterItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BrightnessFilterItem.h; sourceTree = "<group>"; };
 		BF7B260D1C461E5300EB85AC /* BrightnessFilterItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BrightnessFilterItem.m; sourceTree = "<group>"; };
 		BF7B260F1C4625F300EB85AC /* FilterElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FilterElement.h; sourceTree = "<group>"; };
@@ -250,6 +250,8 @@
 			children = (
 				BF7B25FA1C45079600EB85AC /* Utils.h */,
 				BF7B25FB1C45079600EB85AC /* Utils.m */,
+				BF12EC1D1C60B1A800847EB5 /* FileManager.h */,
+				BF12EC1E1C60B1A800847EB5 /* FileManager.m */,
 			);
 			name = Util;
 			sourceTree = "<group>";
@@ -268,8 +270,6 @@
 		BF7B26041C46070300EB85AC /* model */ = {
 			isa = PBXGroup;
 			children = (
-				BF7B26051C46074100EB85AC /* FilterManager.h */,
-				BF7B26061C46074100EB85AC /* FilterManager.m */,
 				BF7B26191C462ABC00EB85AC /* FilterListModel.h */,
 				BF7B261A1C462ABC00EB85AC /* FilterListModel.m */,
 			);
@@ -512,9 +512,9 @@
 				BF7B26501C46620000EB85AC /* HighlightShadowFilterItem.m in Sources */,
 				BF7B261B1C462ABC00EB85AC /* FilterListModel.m in Sources */,
 				BF7B25EF1C44F18B00EB85AC /* BaseNavigationController.m in Sources */,
-				BF7B26071C46074100EB85AC /* FilterManager.m in Sources */,
 				BF7B264D1C46611900EB85AC /* GammaFilterItem.m in Sources */,
 				BF7B26031C4602C900EB85AC /* UIColor+Utils.m in Sources */,
+				BF12EC1F1C60B1A800847EB5 /* FileManager.m in Sources */,
 				BF7B25F71C44FC7700EB85AC /* EditorViewController.m in Sources */,
 				BF7B262F1C46440E00EB85AC /* UIImage+ImageFilter.m in Sources */,
 			);

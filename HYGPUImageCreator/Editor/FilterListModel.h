@@ -8,6 +8,7 @@
 
 #import <JSONModel/JSONModel.h>
 #import "FilterItem.h"
+#import "ContrastFilterItem.h"
 
 @interface FilterListModel : JSONModel
 
